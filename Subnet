@@ -1,0 +1,28 @@
+#
+
+
+A Subnet is a logically visible subdivision of an IP network. 
+Subnetting is the process of dividing a large network into smaller, more manageable parts to improve performance, organization, and security.
+
+
+## Key Concepts
+1) IP Address: Every device on a network has an IP address (e.g., 192.168.1.10), which includes:
+
+Network portion: Identifies the network.
+Host portion: Identifies the device within the network.
+
+2) Subnet Mask: Defines which part of the IP address is the network and which part is the host. For example:
+
+IP address: 192.168.1.10
+
+Subnet mask: 255.255.255.0
+
+Network part: 192.168.1
+
+Host part: .10
+
+3) CIDR Notation: A compact way to represent a subnet using a slash (e.g., 192.168.1.0/24). 
+The /24 indicates that the first 24 bits are the network portion.
+
+255.255.255.255
+1st 255 has 

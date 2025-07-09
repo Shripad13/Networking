@@ -1,0 +1,36 @@
+
+## An IPv4 address is a 32-bit number used to identify a device on a network.
+
+## Breakdown of IPv4 Bits
+Total bits: 32
+
+Divided into 4 octets (8 bits each), usually written in dotted decimal format.
+
+Example: 192.168.1.1
+
+Binary equivalent: 11000000.10101000.00000001.00000001
+
+Each octet (segment) can range from 0 to 255, because:
+
+2^8 = 256
+
+Valid range: 
+0 to 255
+
+## Structure
+An IPv4 address typically includes:
+
+Network portion: Defines which network the IP belongs to.
+
+Host portion: Identifies the specific device (host) on that network.
+
+The division between network and host parts depends on the subnet mask.
+
+## Example with Subnet Mask
+IP: 192.168.1.10
+
+Subnet mask: 255.255.255.0 → 24 bits for network, 8 bits for host
+
+Network portion: 192.168.1
+
+Host portion: .10
