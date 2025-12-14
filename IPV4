@@ -34,3 +34,33 @@ Subnet mask: 255.255.255.0 → 24 bits for network, 8 bits for host
 Network portion: 192.168.1
 
 Host portion: .10
+
+
+
+## Public IP Address -
+Globally unique, They are not free, ISP will offers
+
+Class   IP Range                 Hosts per Network   Default Subnet Mask    Slash Notation
+A -     1 to 126                  16,777,214         255.0.0.0              /8
+B -     128 to 191                65,534             255.255.0.0            /16 
+C -     192 to 223                254                255.255.255.0          /24
+D -     224 to 239 (Multicast)  
+E -     240 to 255 (Experimental)
+
+
+Class  Start Addess         End Address         
+A      0.0.0.0             126.255.255.255       
+B      128.0.0.0           191.255.255.255        
+C      192.0.0.0           223.255.255.255       
+D      224.0.0.0           239.255.255.255
+E      240.0.0.0           254.255.255.255
+
+
+## Private IP Address -
+THey are not globally unique, Free to use, within organization network
+Intranet. you r own network
+
+Class  Start Addess         End Address         Total IP Addresses
+A      10.0.0.0            10.255.255.255        16,777,214
+B      172.16.0.0          172.31.255.255        1,048,574
+C      192.168.0.0         192.168.255.255       65,534
