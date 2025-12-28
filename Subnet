@@ -24,5 +24,8 @@ Host part: .10
 3) CIDR Notation: A compact way to represent a subnet using a slash (e.g., 192.168.1.0/24). 
 The /24 indicates that the first 24 bits are the network portion.
 
-255.255.255.255
-1st 255 has 
+255.255.255.0
+1st 255 has 8 bits
+2nd 255 has 8 bits  
+3rd 255 has 8 bits
+4th 0 has 0 bits

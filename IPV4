@@ -27,6 +27,9 @@ Host portion: Identifies the specific device (host) on that network.
 The division between network and host parts depends on the subnet mask.
 
 ## Example with Subnet Mask
+what is subnet mask? 
+A subnet mask is a 32-bit number that divides an IP address into a network portion and a host portion.
+
 IP: 192.168.1.10
 
 Subnet mask: 255.255.255.0 → 24 bits for network, 8 bits for host
@@ -57,8 +60,8 @@ E      240.0.0.0           254.255.255.255
 
 
 ## Private IP Address -
-THey are not globally unique, Free to use, within organization network
-Intranet. you r own network
+They are not globally unique, Free to use, within organization network
+Intranet. your own network
 
 Class  Start Addess         End Address         Total IP Addresses
 A      10.0.0.0            10.255.255.255        16,777,214

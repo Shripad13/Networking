@@ -13,19 +13,24 @@ F5 is a networking device (often a load balancer) used to distribute traffic, im
 
 VPC ---> Subnets (Servers) ---> routes --->RouteTables ---> IGW ---> User
 
+In Subnet we have 2 types
+1. Public Subnet - connected to IGW (internet gateway)
+2. Private Subnet - not connected to IGW
+
+
 In subnet we have, Servers & NAT-GW they connected to Route tables
 
 What is the biggest network can be provided in AWS?
 CIDR / 16 is the biggest network that can be provided by AWS with 65,536 IP's
 
-Size of the any network depends on Classless inter domain Routing 
+Size of the any network depends on Classless Inter Domain Routing (CIDR) notation
 
 10.20.0.0/16
 Means first 2 bits 10.20 are already occupied, we can use only 0.0 = 256*256 = 65536 IP's
 
 VPC is a regional service in AWS
 
-DHCP server - assigns a IP Network
+DHCP server - Dynamically assigns a IP Network to the instances launched in VPC
 
 # Router- Helps in a connecting two different networks 
 Im AWS router is called as IGW - an entry point to access the internet 
@@ -39,16 +44,16 @@ One IGW can be attached to only one VPC also One VPC cannot have more than 1 IGW
 # There will be a route table between IGW and Public subnet
 
 
-Any one wants (from internet)to connect to server , it should not allow but if my server  should  connect to internet and downloads required packages
+Any one wants (from internet)to connect to server, it should not allow but if my server should connect to internet and downloads required packages
 Then the concept of NAT gateway comes into picture 
 NAT gateway enables the communication between private to Public 
 
-If Private machines wants to talk to the internet , they need to talk over the NAT Gateway , NATG can  only be public if its created in Public Subnet which has access to internet.
+If Private machines wants to talk to the internet , they need to talk over the NAT Gateway , NATG can only be public if its created in Public Subnet which has access to internet.
 
 Usually between 2 networks communication will not happen for this we need vpc peering.
 # VPC Peering helps in communication between 2 VPC's
 
-While enabling the peering, CIDR should be different of 2 networks
+# While enabling the peering, CIDR should be different of 2 networks
 
 If we have 4 VPC's in same region or different region then you need to do a multiple (4) VPC peerings,
 that where we have TRANSIT GATEWAY comes into Picture.
@@ -132,7 +137,7 @@ NACL = Compound Wall Security
 
 🧠 Simple Example Setup
 Public Subnet:
-* ALB
+* Application Load Balancer (ALB)
 * Bastion Host
 * NAT Gateway
 
@@ -168,7 +173,7 @@ Bastillion is a tool to manage bastion hosts.
 
 ## expense-vpc - 
 1. VPN can be hosted on AWS or AWS VPN
-2. In our case, we are goin with bastion host to access private instances.
+2. In our case, we are going with bastion host to access private instances.
 
 In expense-vpc, we have Load Balancer which is internet facing hosted on Public subnet having 2 regions (us-east-1 & us-west-2) .
 Each subnet will have route table associated with IGW to access internet.
