@@ -192,3 +192,36 @@ When traffic leaves a subnet, the route table is consulted to find the best matc
 # Analogy
 Route Table: Your GPS device's list of all possible roads.
 Route: A specific instruction on that list, like "Turn left onto Main Street"
+
+## 
+# Subnets - 
+Divides VPC into smaller segments
+Assigned to spacific availability zones.
+
+# NAT Gateway 
+Enables private subnet access to the internet
+Prevents direct inbound access.
+
+# Internet Gateway 
+Provides internet access to instances
+Required for public VPC access
+
+# Security Groups
+Acts as firewall for instances
+Controls inbound & outbound traffic
+
+# Network ACLs
+Filetrs traffic at the subnet level
+Provides inbound & outbound rule-based filtering
+
+# ELastic IP -
+Static Public IP for cloud instances
+Can be remapped between instances
+
+# Flow logs
+Captures detailed network traffic data.
+Helps with monitoring & troubleshooting
+
+# Endpoints
+Provides private access to AWS services
+Eliminates need for public internet access
