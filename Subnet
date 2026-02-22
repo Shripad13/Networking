@@ -29,3 +29,20 @@ The /24 indicates that the first 24 bits are the network portion.
 2nd 255 has 8 bits  
 3rd 255 has 8 bits
 4th 0 has 0 bits
+
+
+# what does this mean in networking? 10.0.4.0/24
+> “10.0.4.0/24” means a private subnet containing 254 usable IP addresses, all starting with 10.0.4.
+
+10.0.4.0 - This is the network address
+It’s part of the private IP range (10.0.0.0 – 10.255.255.255), so it’s used inside internal networks, not on the public internet
+
+/24 - This is the subnet mask length
+/24 means the first 24 bits are for the network, and the remaining 8 bits are for hosts
+In dotted-decimal form, that’s 255.255.255.0
+
+Network address: 10.0.4.0
+Broadcast address: 10.0.4.255
+Usable IPs: 10.0.4.1 → 10.0.4.254
+Total addresses: 256
+Usable hosts: 254
