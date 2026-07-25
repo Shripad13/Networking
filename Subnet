@@ -46,3 +46,49 @@ Broadcast address: 10.0.4.255
 Usable IPs: 10.0.4.1 → 10.0.4.254
 Total addresses: 256
 Usable hosts: 254
+
+
+##
+# why do we need different range of VPC's for VPC peering in AWS?
+1. AWS explicitly blocks overlapping CIDRs.
+You cannot create a VPC peering connection if CIDR blocks overlap.
+
+2. AWS cannot "fix" overlapping ranges by translating IPs.
+
+3. Routing must be unambiguous
+Each VPC uses CIDR blocks to route traffic internally.
+The router cannot determine which VPC should receive traffic for a given IP.
+This creates routing ambiguity and breaks connectivity.
+
+✅ ✅ Non-Overlapping CIDR (Allowed ✅
+Example 1 (No IP range is shared)
+VPC A: 10.0.0.0/16 → (10.0.0.0 – 10.0.255.255)
+VPC B: 10.1.0.0/16 → (10.1.0.0 – 10.1.255.255)
+
+Example 2 ( Completely separate networks)
+VPC A: 192.168.1.0/24 → (192.168.1.0 – 192.168.1.255)
+VPC B: 192.168.2.0/24 → (192.168.2.0 – 192.168.2.255)
+
+Example 3 (Different CIDR sizes)
+VPC A: 172.16.0.0/16 → (172.16.0.0 – 172.16.255.255)
+VPC B: 172.17.0.0/20 → (172.17.0.0 – 172.17.15.255)
+
+❌ ❌ Overlapping CIDR (Not Allowed ❌)
+Example 1 (Subset overlap)
+VPC A: 10.0.0.0/16 → (10.0.0.0 – 10.0.255.255)
+VPC B: 10.0.1.0/24 → (10.0.1.0 – 10.0.1.255)
+👉 VPC B range is inside VPC A
+
+Example 2 (Exact same range)
+VPC A: 192.168.1.0/24
+VPC B: 192.168.1.0/24
+❌ Conflict → Not allowed
+
+Example 3 (Partial overlap) Routing confusion
+VPC A: 172.16.0.0/20 → (172.16.0.0 – 172.16.15.255)
+VPC B: 172.16.10.0/24 → (172.16.10.0 – 172.16.10.255)
+👉 VPC B falls within VPC A
+
+# “Does any IP from VPC B fall inside VPC A range?”
+✅ NO → Non-overlapping → Allowed
+❌ YES → Overlapping → Not allowed

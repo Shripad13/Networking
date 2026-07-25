@@ -225,3 +225,112 @@ Helps with monitoring & troubleshooting
 # Endpoints
 Provides private access to AWS services
 Eliminates need for public internet access
+
+# #############################################################################################
+AWS VPC is a regional resources.
+In VPC we have subnet range of /16 to /28 for IPv4 only 
+There is a Soft limit of 5 VPC's per region, per account.
+
+VPC's use private address space that means they are NOT publicly resolvable and can access over the internet.
+10.0.0.0/8
+172.16.0.0/12
+192.168.0.0/16
+
+# Default VPS Points 
+Within a Default VPC's you will be having the PUBLIC IPv4 CIDR so that is publicly accessible over the internet.
+THis is the main reason to avoid using the default VPC.
+Default VPC automatically allows the internet  access.
+In Default VPC, Under NACL's All traffic is allowed in outbound & inbound rules.
+DHCP options - will have 
+Domain Name- ec2.internal
+Domain name servers - AmazonProvidedDNS
+
+Subnet - 
+In Subnet you can see IPv4 CIDR range
+Also you can see *Available IPv4 address*
+
+Everywhere you will refer the VPC ID for example in scripting or IaC
+
+# Is route tables are stateful or stateless in AWS?
+AWS Route Tables are neither stateful nor stateless.
+A Route Table's only job is to determine where to send traffic based on the destination IP address. It does not track connection state or allow/deny traffic.
+Route Tables don't allow or deny traffic.
+
+
+EC2 in private Network connects to RDS privately, what actions needs to perform for this?
+
+
+
+
+# symmetric vs asymmetric encryption
+Symmetric encryption uses a single shared key to both lock (encrypt) and unlock (decrypt) data. Asymmetric encryption uses a mathematically linked key pair: a public key to encrypt and a private key to decrypt.
+
+# VPC Review
+1. Logically isolated netowrk where you can define your own configs
+2. Private IPV4 is require, IPV6 is optional
+3. Valid CIDR's are 10.0.0.0  172.16.0.0, 192.168.0.0 
+4. IPV4 CIDR must be between /16 & /28
+5. VPC's are regional resource - 5vpc per region
+
+Default Resources within Custom VPC's
+1. DHCP Option sets to configure DHCP options like domain names, NTP servers, DNS servers
+2. Main route table (default) witha primary local route 
+3. Main NACL (default) with 2 simple rules - 2 separate for inbound & outbound rules
+   
+
+# VPC Internet Gateways
+Horizontally scaled & highly available VPC component that allows communication between your VPC and the internet.
+Supports both Ipv4 & Ipv6 traffic
+Automaticaaly scales for traffic & offers  high availability
+Enables public subnet resources to connect to the internet
+Give you  target in your VPC for internet -routable traffic to flow through
+Create seprately from the VPC & only attachable to single VPC
+
+# VPC subnets
+Range of IP addresses within your VPC for hosting resources
+Subnets are bound to a single AZ
+Subnets support IPv4 & Ipv6 also dual stack (4&6 at the same time)
+4 types of subnets - Public  Private , VPN only, isolated 
+
+AWS reserves 5 IP addresses per subnet.
+Example - /28 CIDR subnet
+Only 11 (16-5) have useable IP addresses
+
+# Reserved Subnet IP's
+VPC CIDR: 10.0.0.0/16
+Subnet CIDR: 10.0.0.0/24
+
+Network address: 10.0.0.0
+VPC Router: 10.0.0.1
+VPC DNS server: 10.0.0.2
+Future Use: 10.0.0.3
+Broadcast address: 10.0.0.255
+
+
+Route tables contains rules(routes), that tell your network traffic where to go.
+# Route table Types
+1. Main Route Table - Automatically comes with your VPC & acts as the default table for any leftover, unassociated subnets.
+2. Custom Route Table - Fully define & associate with subnets
+
+# Custom Route Tables Concepts
+1. Destination: Range of IP address (CIDR) where u want to direct your traffic towards (192.168.0.0/24)
+2. Target: network interfaces or other connections where the destination traffic should go (Internet Gateway)
+3. Local Route: Every route table has a local route applied for any VPC-bound traffic
+4. Association: You associate subnets with a Route Table to apply the chosen rules for any network traffic in the subnet.
+
+Public subnet route tables will have a local VPC route & a route to the IGW for all other traffic.
+Public subnets will have publicly resolvable IP address assigned to the compute.
+Public subnet will have one local route & IGW route
+
+Private subnet route tables are only going to have local VPC route for the VPC CIDR traffic.
+Private subnet will have one local route
+
+# Network Access Control List: NACL
+Allows or denies specific inbound or outbound traffic at the subnet level.
+A Stateless firewall to control traffic at the subnet level.
+Stateless: Must explicitly define both inbound & Outbound traffic rules.
+Assign one NACL per subnet, with a Default NACL in place if needed.
+Newly Created NACLs will deny all traffic by default.
+List of ascending numbered, prioritized rules where the first match wins.
+Traffic NACL's Dont work with:
+Amzon DNS, Amazon DHCP,Amazon EC2 instance metdata, Reserved IP adddressed used by the default VPC router.

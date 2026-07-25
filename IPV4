@@ -1,5 +1,6 @@
 
 ## An IPv4 address is a 32-bit number used to identify a device on a network.
+IPv4 range is made up of Total 32 bits only.
 
 ## Breakdown of IPv4 Bits
 Total bits: 32
@@ -67,3 +68,11 @@ Class  Start Addess         End Address         Total IP Addresses
 A      10.0.0.0            10.255.255.255        16,777,214
 B      172.16.0.0          172.31.255.255        1,048,574
 C      192.168.0.0         192.168.255.255       65,534
+
+
+##
+10.0.0.0/16
+4 octects having CIDR of range 16
+Out of 32 bits, 16 its are usabel IP space.
+2^16 = 65,536 IPs can be used for Host part
+
