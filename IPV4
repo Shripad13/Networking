@@ -70,9 +70,41 @@ B      172.16.0.0          172.31.255.255        1,048,574
 C      192.168.0.0         192.168.255.255       65,534
 
 
-##
+## IP & CIDR
 10.0.0.0/16
 4 octects having CIDR of range 16
-Out of 32 bits, 16 its are usabel IP space.
+
+
+10. - 00001010
+0. -  00000000
+0. -  00000000
+0. -  00000000
+Out of 32 bits, 16 bits are usabel IP space.
+First 2 octets or 17 bits locked & last 2 octets are in unlocked bits & allows full range of possible IP's
 2^16 = 65,536 IPs can be used for Host part
 
+
+AWS VPC's can use CIDR ranges betweeen /16 & /28
+
+/16 - 65536
+/17 - 32768
+/18 - 16384
+/19 - 8192
+/20 - 4096
+/21 - 2048
+/22 - 1024
+/23 - 512
+/24 - 256
+/25 - 128
+/26 - 64
+/27 - 32
+/28 - 16
+
+
+In Every subnet the 1st fours & last 1 IP address are reserved for AWS use.
+
+> Public Subnet - Includes a routing table entry to an **Internet Gateway** to support inbound .outbound access to the Internet.
+
+> Private Subnet -  Do **NOT** have routing table entry to an Internet Gateway & are **NOT** directly accessible from the public Internet
+
+> Typically use a Jump box (NAT/proxy/Bastion host) to support restricted, **outbound only** public Internet access.

@@ -194,9 +194,17 @@ Route Table: Your GPS device's list of all possible roads.
 Route: A specific instruction on that list, like "Turn left onto Main Street"
 
 ## 
-# Subnets - 
+# Subnets - defines a range of IP address in our VPC
 Divides VPC into smaller segments
 Assigned to spacific availability zones.
+
+# Private SUbnet - 
+Should be used for resources that won't be accessible over the internet.
+
+# Public Subnet -
+SHould be used for resources that will be accessed over the internet.
+
+Each subnet must reside entirely within one Availability Zone & cannot span zones.
 
 # NAT Gateway 
 Enables private subnet access to the internet
@@ -236,7 +244,7 @@ VPC's use private address space that means they are NOT publicly resolvable and 
 172.16.0.0/12
 192.168.0.0/16
 
-# Default VPS Points 
+# Default VPC Points 
 Within a Default VPC's you will be having the PUBLIC IPv4 CIDR so that is publicly accessible over the internet.
 THis is the main reason to avoid using the default VPC.
 Default VPC automatically allows the internet  access.
@@ -257,10 +265,25 @@ A Route Table's only job is to determine where to send traffic based on the dest
 Route Tables don't allow or deny traffic.
 
 
-EC2 in private Network connects to RDS privately, what actions needs to perform for this?
+# EC2 in private Network connects to RDS privately, what actions needs to perform for this?
 
+VPC: Both the EC2 instance and RDS instance must reside in the same Virtual Private Cloud (VPC) 
 
+EC2 Instance: Must be placed in a Private Subnet (a subnet without a route to an Internet Gateway).
+RDS Instance: Must be placed inside an RDS DB Subnet Group.
 
+EC2 Security Group (e.g., sg-ec2-app):
+    Outbound Rule: Allow traffic to the RDS Security Group on the database port (e.g., TCP 3306 for MySQL, 5432 for PostgreSQL).
+
+RDS Security Group (e.g., sg-rds-db):
+    Inbound Rule: Allow inbound traffic only from the EC2 Security Group (sg-ec2-app) as the Source
+
+DNS Resolution
+    Ensure your VPC configuration has both DNS Resolution and DNS Hostnames enabled. 
+    This allows the EC2 instance to resolve the private RDS endpoint URL (e.g., ://amazonaws.com) to its private IP address inside the subnet [1]
+
+Testing Connection from EC2:
+    Login to Ec2 using AWS SSM and test the connectivity with telnet or nc -zv command
 
 # symmetric vs asymmetric encryption
 Symmetric encryption uses a single shared key to both lock (encrypt) and unlock (decrypt) data. Asymmetric encryption uses a mathematically linked key pair: a public key to encrypt and a private key to decrypt.
@@ -277,6 +300,15 @@ Default Resources within Custom VPC's
 2. Main route table (default) witha primary local route 
 3. Main NACL (default) with 2 simple rules - 2 separate for inbound & outbound rules
    
+
+An Amazon VPC is an isolated portion of AWS cloud.
+Amazon VPC to create a virtual network for your AWS resources.
+We can Have a complete control over virtual network environment including selection of your own IP address range, creation of Subnets and configuration of route tables and network gateways.
+
+Create a Public facing subnet for your webservers that has access to internet.
+And place backend system such as appservers & DB servers in a private facing subnet with no internet access.
+
+
 
 # VPC Internet Gateways
 Horizontally scaled & highly available VPC component that allows communication between your VPC and the internet.
@@ -334,3 +366,112 @@ Newly Created NACLs will deny all traffic by default.
 List of ascending numbered, prioritized rules where the first match wins.
 Traffic NACL's Dont work with:
 Amzon DNS, Amazon DHCP,Amazon EC2 instance metdata, Reserved IP adddressed used by the default VPC router.
+
+
+7. How to choose security group vs NACL?
+Security Groups vs NACLs:
+1. Security Groups: 
+   - Operate at the instance level.
+   - Stateful: return traffic is automatically allowed.
+   - Used to control inbound and outbound traffic for EC2 instances.
+   - More granular control over individual instances.
+2. NACLs:
+   - Operate at the subnet level.
+   - Stateless: return traffic must be explicitly allowed.
+   - Used to control traffic entering and leaving subnets.
+   - Provide a basic layer of security for multiple instances within a subnet.
+Choose Security Groups for instance-level security and NACLs for subnet-level security.
+
+Security Group: Stateful. If you allow inbound traffic, the return response is automatically allowed, regardless of outbound rules.
+NACL: Stateless. If you allow an inbound request, you must also explicitly configure an outbound rule to allow the response back.
+
+Security Group: Operates at the individual instance or network interface (ENI) level.
+NACL: Operates at the subnet level, covering every resource inside that subnet.
+
+Security Group: Supports only allow rules.
+NACL: Supports both allow and deny rules.
+
+Security Group: Evaluates all rules before deciding to let traffic pass.
+NACL: Evaluates rules in a strict numerical order from lowest to highest, stopping at the first rule that matches.
+
+
+Security Group: Denies all inbound traffic and allows all outbound traffic by default.
+Default NACL: Allows all inbound and outbound traffic by default (though custom NACLs deny everything by default).
+
+
+💡 Stateful (Security Groups)
+A stateful firewall remembers active connections. 
+It tracks the state of network traffic from start to finish.
+
+
+🔎 Stateless (NACLs)
+A stateless firewall treats every single packet of data as an isolated event. 
+It has no memory of previous traffic and does not track connection states.'
+
+
+# VPC Gateway Endpoints
+Amazon S3 and Dynamo DB offer VPC endpoints to connect without traversing the public internet.
+
+An Amazon VPC Gateway Endpoint network feature that allows resources inside your private VPC to connect directly to Amazon S3 and Amazon DynamoDB without using the public internet.
+
+A Gateway Endpoint keeps this traffic entirely within the AWS private network backbone, keeping it safe from the public internet.
+
+
+
+1. How do you control your VPC Traffic?
+   Use:
+    ROute tables
+    Security groups
+    NACL's
+    Internet Gateway
+
+# Route Tables - Directs the Traffic Between VPC resources
+  Also Determine where network traffic is routed.    
+It has Main and custom route tables
+VPC route table: Local route
+Only one route table per subnet
+
+> Route table attached to Public Subnet
+Destination    Target
+10.0.0.0/16     local
+0.0.0.0/0       IGW
+
+> Route table attached to Private Subnet
+Destination    Target
+10.0.0.0/20    local
+0.0.0.0/0       NAT
+
+
+> Best practise: Use custom route tables for each subnet to enable granular routing for destinations.
+
+# Security Groups:
+    1. Are Virtual firewall that control inbound and outbound traffic for one or more instances.
+    2. **Deny all incoming traffic by default**
+    3. Allows rules based on filter like TCP, UDP, & ICMP protocols.
+    4. Are Stateful means inbound request is allowed and outbound does not have to be specified/tracked
+    5. Can define a SOurce/Target as either a CIDR block or another security group to handle situtations like auto-scaling.
+   
+ 1. Bydefault, all newly created security groups **allow all outbound traffic** to all destinations.
+ 2. Modifying the default outbound rule on security group increases complexity and is  not recommended unless required for compliance.
+ 3. Most organizations create security groups with inbound rules for each functional tier (web/app/data/etc.) within an application.
+
+# Network ACL's NACL's -
+1. are **optional virtual firewalls** that control traffic in & out of a subnet.
+2. Allow all incoming/outgoing traffic bydefault and use stateless rule to allow or deny traffic.
+3. Staless rules inspect **all inbound and outbound traffic and do not keep track of connections**.
+4. Enforce rules only at the boundary of the subnet not at the instance level, like security groups.
+   
+# Internet Gateways - Directs Traffic to your VPC
+1. Allow communication bewtween instances in your VPC and Internet.
+2. Are horizontally scaled, redundant & highly available by default.
+3. Provide a target in your VPC route tables for Internet-routable traffic.
+
+# To enable access To or From the Internet for instance in a VPC subnet, you must:
+
+1. Attach an Internet gateway to your VPC.
+2. Ensure that your instance in your subnet have public IP addresses or Elastic IP addresses.
+3. Ensure that your subnet's route table points to the Internet gateway.
+4. Ensure that your NACL's & security groupps allow the relevant traffic to flow and from your instance.
+
+
+
